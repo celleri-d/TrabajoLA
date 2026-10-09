@@ -1,0 +1,131 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,landscape,margin=1.6cm]{geometry}
+\usepackage{longtable,array,booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{nosep,leftmargin=*}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Fase 0. Matriz de análisis de casos}\\[2pt]
+Ciencia de Datos -- Unidad 2 (Learning Analytics) -- Trabajo aplicativo\\
+Universidad de Cuenca
+\end{center}
+
+Para esta fase revisamos las cinco herramientas vistas en clase. Además de las diapositivas, nos apoyamos en los boletines del proyecto LALA (n.º 3, enero de 2020; n.º 4, agosto de 2020; n.º 5, abril de 2021) y en el manual de usuario de FlipMyLearning. En la última columna anotamos las limitaciones que nosotros identificamos al leer esos materiales, no solo las que se comentaron en clase.
+
+{\footnotesize
+\begin{longtable}{P{2.2cm} P{3.4cm} P{3.6cm} P{2.7cm} P{2.2cm} P{4.3cm} P{5.0cm}}
+\toprule
+\textbf{Herramienta} & \textbf{¿Qué decisión apoya y de quién?} & \textbf{¿Qué datos usa y de dónde salen?} & \textbf{Nivel de analítica} & \textbf{Tipo} & \textbf{¿Cómo la validaron? ¿Con qué evidencia?} & \textbf{Limitación o riesgo que identificamos}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\textbf{OnTask}\par (U. de Edimburgo; piloto con la UFRPE, Brasil)
+& Ayuda al \textbf{docente} a decidir qué retroalimentación personalizada envía a cada estudiante y en qué momento. El docente arma reglas que activan textos distintos según la situación de cada estudiante, lo que le permite dar retroalimentación individual en cursos grandes.
+& Características académicas de los estudiantes, sus interacciones con las actividades del curso y su rendimiento (notas). Los datos los sube o conecta el propio docente desde el LMS y sus registros de evaluación.
+& Descriptiva. La parte de \emph{qué hacer} la definen las reglas del docente, no un modelo predictivo.
+& Enseñanza (apoya la práctica docente).
+& Antes del piloto se aplicó una encuesta de percepción de la retroalimentación (23 ítems Likert de 7 puntos): respondieron 36 de 60 estudiantes (58\,\%). En el piloto, los docentes dedicaron entre 60 y 130 minutos por semana a escribir retroalimentación. Al final del semestre se encuestó a los estudiantes sobre impacto y utilidad ($n=48$, 42,8\,\% de respuesta): perciben que la retroalimentación fue oportuna y les ayudó a ajustar sus estrategias.
+& \begin{itemize}
+\item La evidencia es de percepción (encuestas), no de rendimiento medido; tampoco hubo grupo de comparación.
+\item Los propios estudiantes desconfían de la automatización: fue el ítem peor valorado ($M=4{,}97$ sobre 7).
+\item Preocupa perder el lado afectivo de la retroalimentación.
+\item Demanda tiempo al docente (1 a 2 horas semanales) y las reglas hay que rehacerlas en cada curso.
+\item Si una regla está mal planteada, la herramienta no avisa.
+\end{itemize}\\
+\midrule
+
+\textbf{iCoRa}\par (ESPOL)
+& Ayuda al \textbf{estudiante} a decidir qué materias tomar el próximo semestre. La idea es que llegue a su sesión de consejería de 15 minutos con opciones ya analizadas, para usar ese tiempo en discutirlas con el consejero.
+& Historial académico del estudiante sobre su malla (materias aprobadas, reprobadas y repetidas, con sus notas) e información histórica de cada materia: créditos, carga semanal, estimadores de dificultad, distribución de calificaciones y rendimiento de cohortes anteriores. Todo sale del sistema académico de ESPOL.
+& Predictiva y prescriptiva: predice un rango de nota para cada materia y un promedio esperado para el conjunto elegido, y explica las variables que influyen.
+& Aprendizaje (el usuario es el estudiante); apoya también la consejería.
+& Según el boletín 4, en 2020 la herramienta estaba en pruebas de usuario de usabilidad y utilidad; el boletín 5 (2021) indica que pasaría a una nueva etapa de pruebas. No reportan todavía resultados. Su antecedente directo, las nuevas visualizaciones de SiCa (Sistema de Consejerías Académicas), sí se evaluaron: pretest a 175 consejeros, 187 capacitados, SUS, postest a 128 y uso real con 315 consejeros y 7714 estudiantes en el primer semestre de 2019.
+& \begin{itemize}
+\item Aún no hay evidencia de que mejore las decisiones o el rendimiento.
+\item El estudiante podría usar la predicción para elegir solo materias \emph{fáciles} y retrasar su avance.
+\item Un rango de nota puede leerse como una certeza; las explicaciones con fórmulas pueden no entenderse.
+\item Al basarse en cohortes pasadas, repite sus patrones (por ejemplo, cambios de docente no se reflejan).
+\item Puede restarle peso a la conversación con el consejero.
+\end{itemize}\\
+\midrule
+
+\textbf{Sistema de consejería UCuenca (AvAc)}\par (LALA, inspirado en LISSA de KU Leuven)
+& Ayuda al \textbf{docente consejero} (y a directores de carrera) a orientar al estudiante sobre su trayectoria y las materias que conviene tomar. Las sesiones se hacen a mitad de ciclo y antes de la matrícula.
+& Registros académicos del sistema de la universidad: materias aprobadas, reprobadas, repetidas, anuladas y retiradas; notas; estructura de la malla con prerrequisitos; carga por ciclo; comparación con compañeros. Luego se le integró un panel de predicción de abandono.
+& Descriptiva (trayectoria y rendimiento); con el panel integrado, también predictiva.
+& Gestión académica (consejería); apoya la enseñanza.
+& Piloto en cinco fases (preparación, acuerdo, capacitación, uso y mejora). En la fase de acuerdo participaron 75 docentes y funcionarios de 11 carreras. En la fase de uso hubo 31 consejeros activos: revisaron 522 estudiantes y 178 asistieron a consejería por invitación (6 más por iniciativa propia). Solo 25 estudiantes respondieron la encuesta, en general con opiniones positivas (Guerra et al., 2020).
+& \begin{itemize}
+\item La UCuenca no tenía un proceso de consejería: se introdujo a la vez la herramienta y el proceso, con resistencia por la carga de trabajo y sin horas asignadas.
+\item El piloto empezó con docentes \emph{entusiastas}, lo que sesga los resultados a favor.
+\item Solo 25 de 184 estudiantes atendidos respondieron la encuesta.
+\item No se midió el efecto en el rendimiento o la permanencia.
+\item A los estudiantes les cuesta interpretar su propia situación en el tablero.
+\end{itemize}\\
+\midrule
+
+\textbf{Flip\-My\-Lear\-ning}\par (Universidad de Cuenca; plugin de Moodle basado en NoteMyProgress)
+& Ayuda al \textbf{docente} a seguir semana a semana el avance de sus estudiantes frente a lo planificado y a decidir a quién contactar (permite escribir al estudiante o a su grupo). Al \textbf{estudiante} le ayuda a autorregularse.
+& Registros de Moodle: tiempo invertido, sesiones (interacciones separadas por menos de 30 minutos), días activos, accesos y finalización de recursos y actividades, entrega de tareas, calificaciones, intentos en cuestionarios e interacciones con otros estudiantes. El docente configura las semanas y las horas esperadas de trabajo.
+& Descriptiva; la sección de deserción agrupa a los estudiantes por comportamiento (\emph{clustering}), un primer paso hacia lo predictivo.
+& Aprendizaje (autorregulación) y enseñanza.
+& Según su artículo de presentación (Aguilar, Maldonado-Mahauad y Sigua, 2021), docentes y estudiantes evaluaron las visualizaciones y las consideraron útiles. También se identificó que el tiempo invertido, las sesiones y los indicadores de profundidad cognitiva y amplitud social ayudan a reconocer grupos en riesgo de abandono. No se reporta el tamaño de la muestra.
+& \begin{itemize}
+\item Los grupos del \emph{clustering} no son una predicción validada: no hay etiqueta ni métrica de acierto.
+\item Si el docente no configura la finalización de actividades, \emph{haber visto} un recurso cuenta como completarlo, y el progreso se sobrestima.
+\item Más tiempo conectado no significa más aprendizaje, y la regla de 30 minutos para separar sesiones es arbitraria.
+\item Exige configuración semanal al docente.
+\item Muestra foto, nombre y correo del estudiante, sin indicar cómo se gestiona el consentimiento.
+\end{itemize}\\
+\midrule
+
+\textbf{Sistema de predicción de abandono (UC3M)}\par (adaptado en ESPOL, UCuenca, UACh, UPS y PUC)
+& En las carreras, ayuda a \textbf{consejeros y directores} a decidir a qué estudiantes asesorar y qué materias recomendarles. En los MOOC de la PUC, ayuda al \textbf{docente} a decidir a qué grupo de riesgo enviar un mensaje.
+& En las carreras, registros académicos de cada institución (cada una usa los datos que tiene disponibles). En los MOOC, la actividad semanal y las tareas en Coursera.
+& Predictiva: estima la probabilidad de abandono. En los MOOC agrupa a los estudiantes en tres niveles de riesgo y el modelo se recalcula cada semana.
+& Gestión (carreras) y enseñanza (MOOC).
+& Los pilotos midieron utilidad, impacto y rendimiento con los registros de uso y una encuesta voluntaria a directores y docentes. A partir de los pilotos se reubicaron los paneles para hacerlos más accesibles y, en ESPOL, se amplió el conjunto de datos y se agregó información explicativa. El boletín 5 resume que el uso y la efectividad fueron buenos, \emph{aunque hay dificultades para medir este indicador}.
+& \begin{itemize}
+\item La efectividad casi no se pudo medir: no hay comparación entre estudiantes con y sin intervención.
+\item La encuesta voluntaria tiende a recoger a los usuarios más satisfechos.
+\item En ESPOL los consejeros solo ven la predicción durante la consejería al inicio del semestre, cuando ya es tarde para actuar dentro del ciclo.
+\item Las primeras versiones no explicaban la predicción, lo que dificulta confiar en ella.
+\item Cada institución usa datos distintos, así que los resultados no son comparables.
+\end{itemize}\\
+\end{longtable}
+}
+
+\section*{Lo que tomamos de estos casos para nuestra propuesta}
+
+Al comparar las cinco herramientas vimos un patrón: casi todas apoyan la consejería al \emph{inicio} del semestre (AvAc, iCoRa, la predicción en ESPOL), pero ninguna alerta a tiempo \emph{durante} el ciclo usando la actividad de eVirtual. FlipMyLearning sí usa Moodle, pero está pensada para el docente de cada curso y no para el tutor que acompaña a un grupo de estudiantes. Esa es la brecha que queremos cubrir.
+
+\begin{enumerate}
+\item \textbf{De OnTask} tomamos la idea de que cada alerta debe venir con una acción concreta y fácil de ejecutar (por ejemplo, un mensaje con plantilla).
+\item \textbf{De AvAc y de la predicción UC3M} tomamos el uso de datos que la universidad ya tiene y la integración con el proceso de consejería existente; nuestra herramienta podría complementar a AvAc.
+\item \textbf{De FlipMyLearning} tomamos los indicadores de actividad en Moodle (sesiones, días activos), pero cuidando sus limitaciones: no contamos horas conectadas y comparamos a cada estudiante con su propio curso.
+\item \textbf{La limitación común} es la falta de evidencia de impacto con un grupo de comparación. Por eso nuestro plan de validación propone comparar paralelos con y sin herramienta y registrar cada intervención.
+\end{enumerate}
+
+\section*{Fuentes}
+\begin{itemize}
+\item Proyecto LALA. Boletín informativo n.º 3 (enero de 2020), n.º 4 (agosto de 2020) y n.º 5 (abril de 2021).
+\item Manual de usuario de FlipMyLearning, versión 1.0 (2021).
+\item Aguilar, B., Maldonado-Mahauad, J. y Sigua, E. (2021). \emph{FlipMyLearning: A Tool for Monitoring and Predicting Learner Behavior in Moodle}.
+\item Guerra, J. et al. (2020). Adaptation and evaluation of a learning analytics dashboard to improve academic support at three Latin American universities. \emph{British Journal of Educational Technology}, 51(4), 973--1001.
+\item Diapositivas de la Unidad 2.
+\end{itemize}
+
+\end{document}

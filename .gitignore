@@ -1,0 +1,20 @@
+# Datos que descarga el notebook
+data/
+*.html
+.ipynb_checkpoints/
+__pycache__/
+# Archivos auxiliares de LaTeX
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.toc
+*.nav
+*.snm
+*.xdv
+*.synctex.gz
+# Paquetes de trabajo (no se suben)
+*.zip
+Commit_*/
+GUIA_COMMITS.txt

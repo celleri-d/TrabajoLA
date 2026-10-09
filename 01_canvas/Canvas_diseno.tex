@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,landscape,margin=1.5cm]{geometry}
+\usepackage{longtable,array,booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{nosep,leftmargin=*}
+
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Canvas de diseño de herramienta de Learning Analytics}\\[2pt]
+{\large Radar Tutor UC: alerta temprana para tutores académicos de primer ciclo}\\[2pt]
+Ciencia de Datos -- Unidad 2 -- Trabajo aplicativo -- Universidad de Cuenca
+\end{center}
+
+{\small
+\begin{longtable}{P{3.3cm} P{22.3cm}}
+\toprule
+\textbf{Bloque} & \textbf{Contenido}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+\textbf{1. Actor y decisión}
+& \textbf{Actor:} el tutor académico (docente tutor) de las asignaturas de primer ciclo.\par
+\textbf{Decisión:} cada semana tiene que decidir a qué estudiantes llamar a una tutoría, a cuáles escribirles con recursos de apoyo y a cuáles derivar a Bienestar Universitario.\par
+\textbf{Cómo la toma hoy:} casi siempre después del primer parcial (semanas 7 u 8), con la nota parcial, lo que le comentan los docentes o porque el estudiante lo busca por iniciativa propia. Para entonces muchas veces ya es tarde.\par
+\textbf{Frecuencia:} debería ser semanal a partir de la semana 4 del ciclo.\\
+\midrule
+
+\textbf{2. Problema educativo}
+& En la Universidad de Cuenca la reprobación y el abandono se concentran al inicio de la carrera. En el seguimiento a la cohorte que ingresó en marzo de 2013 (1900 estudiantes), la tasa de reprobación de asignaturas fue la más alta en el primer año (12,8\,\%) y el abandono llegó al 6,8\,\% en el primer semestre y al 11,3\,\% en el primer año (Bravo, Peña e Illescas, 2020). Eso equivale a unos 215 estudiantes de una sola cohorte que dejaron la carrera en su primer año.\par
+Además, el piloto de AvAc dentro del proyecto LALA mostró que la universidad no tenía un proceso sistemático de consejería y que los docentes temen la carga de trabajo adicional (boletín LALA n.º 4). \textbf{Afectados:} los estudiantes de primer ciclo de cada cohorte y sus tutores.\\
+\midrule
+
+\textbf{3. Pregunta analítica}
+& \emph{¿Qué estudiantes de un curso tienen alta probabilidad de reprobar o abandonar la asignatura, según su actividad en eVirtual y sus entregas durante las cuatro primeras semanas del ciclo?}\par
+\textbf{Nivel:} predictiva (qué pasará), con una acción sugerida según el nivel de alerta. \textbf{Tipo:} enseñanza (apoya el trabajo del tutor).\\
+\midrule
+
+\textbf{4. Datos e indicadores}
+& \textbf{Fuentes:} eVirtual/Moodle (registros de actividad, entregas y calificaciones), sistema académico (matrícula, veces que se cursa la asignatura, créditos y resultado final) y los registros de la propia herramienta (intervenciones y consentimiento).\par
+\textbf{Indicador central (I5):} probabilidad de riesgo, calculada con una regresión logística a partir de I1 (índice de participación semanal: clics de la semana dividido para la mediana del curso), I2 (días activos), I3 (entrega pendiente) e I6 (veces cursada y créditos). Se muestra como semáforo: rojo si es mayor o igual a 0,60; amarillo entre 0,40 y 0,60; verde por debajo de 0,40. El detalle está en el diccionario de datos (carpeta 02\_datos).\\
+\midrule
+
+\textbf{5. Intervención}
+& \textbf{Rojo:} el tutor agenda una tutoría individual en un plazo máximo de 7 días. \textbf{Amarillo:} el tutor envía un mensaje con recursos e invitación a tutoría (envío masivo con plantilla). En ambos casos puede derivar a Bienestar Universitario, y todo queda registrado en la herramienta (I7).\par
+\textbf{Si no se actúa:} el estudiante sigue sin apoyo hasta el primer parcial; en la herramienta aparece como \emph{sin atender} y baja la cobertura del tutor, lo que también sirve para la validación.\\
+\midrule
+
+\textbf{6. Ética y privacidad}
+& Trabajamos con seudónimos y el nombre solo lo ve el tutor asignado. Las variables demográficas no entran al modelo; las usamos únicamente para revisar, de forma agregada, si el modelo se equivoca más con algún grupo. Pedimos consentimiento informado con opción de retirarse (LOPDP, 2021). El estudiante ve sus propios indicadores, pero no su probabilidad de riesgo, para no etiquetarlo. El sesgo que más nos preocupa es castigar a quien trabaja o tiene mala conexión; por eso contamos días activos y no horas, y comparamos a cada estudiante con su propio curso.\\
+\midrule
+
+\textbf{7. Prueba de concepto}
+& \textbf{Dataset:} OULAD (22 cursos, 28\,785 estudiantes, 2013--2014), porque no tenemos acceso a los datos de eVirtual.\par
+\textbf{Indicador demostrado:} I1 a I4, I6 e I5 calculados al día 28. Entrenando con 2013 y probando con 2014 obtuvimos un AUC de 0,72; con la alerta amplia (probabilidad de 0,40 o más) el recall fue 0,82 y la precisión 0,54. Con esos datos el notebook construye las cuatro pantallas de los wireframes (P1 a P4).\par
+\textbf{Limitaciones:} no son datos de la UCuenca, un umbral único no funciona igual en todos los cursos, no demuestra impacto y hay diferencias por edad y sexo que todavía no sabemos si son significativas.\\
+\midrule
+
+\textbf{8. Validación}
+& \textbf{Hipótesis principal:} entre los estudiantes alertados en la semana 4, la tasa de aprobación es mayor en los paralelos cuyo tutor usa la herramienta que en los que mantienen la tutoría habitual.\par
+\textbf{Diseño de comparación:} asignación aleatoria por paralelo durante un semestre.\par
+\textbf{Métricas y criterio de éxito:} técnica (AUC de al menos 0,70 y recall de al menos 0,75), pedagógica (aprobado o no aprobado) y de usabilidad (SUS de al menos 68, uso semanal de al menos 70\,\% de los tutores y 80\,\% de los casos en rojo atendidos en 7 días).\\
+\midrule
+
+\textbf{9. Preguntas abiertas para estadística}
+& \begin{enumerate}
+\item ¿Cómo sabemos si una diferencia en la aprobación entre los grupos es real o se debe al azar?
+\item ¿Cuántos paralelos necesitamos si sorteamos paralelos y no estudiantes?
+\item ¿Qué prueba usamos con una variable aprobado / no aprobado?
+\item ¿Cómo calculamos un intervalo de confianza para el recall y el AUC?
+\item ¿La regresión logística (AUC 0,72) es realmente mejor que el árbol de decisión (0,70)?
+\item ¿La diferencia de recall por edad (0,77 frente a 0,84) es significativa?
+\item ¿Cómo controlamos que cada paralelo tenga un docente distinto?
+\end{enumerate}\\
+\end{longtable}
+}
+
+\end{document}

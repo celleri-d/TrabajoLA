@@ -1,0 +1,174 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,landscape,margin=1.6cm]{geometry}
+\usepackage{longtable,array,booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{nosep,leftmargin=*}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Fase 2. Diccionario de datos}\\[2pt]
+Radar Tutor UC -- Ciencia de Datos, Unidad 2 -- Universidad de Cuenca
+\end{center}
+
+En este documento detallamos de dónde sale cada dato que usa la herramienta, cómo lo transformamos y en qué indicador termina. La unidad de análisis es la \textbf{matrícula de un estudiante en una asignatura y período}. Los indicadores se recalculan cada lunes y la primera alerta se emite al terminar la \textbf{semana 4} del ciclo (día 28).
+
+\section{Variables}
+
+{\footnotesize
+\begin{longtable}{P{3.2cm} P{3.4cm} P{2.3cm} P{2.8cm} P{2.6cm} P{6.2cm} P{3.0cm}}
+\toprule
+\textbf{Variable} & \textbf{Fuente} & \textbf{Tipo} & \textbf{Granularidad} & \textbf{Frecuencia de actualización} & \textbf{Transformación} & \textbf{Indicador}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Código del estudiante & Sistema académico & Texto & Estudiante & Por período & Se reemplaza por un seudónimo (hash con una clave secreta). El nombre y la cédula no se guardan junto con los datos de análisis. & Clave para unir las tablas\\
+Asignatura, paralelo y período & Sistema académico (matrícula) & Categórica & Asignatura $\times$ paralelo $\times$ período & Por período & Define el curso con el que se compara a cada estudiante. & I1, I5\\
+Fecha de inicio del período & Calendario académico & Fecha & Período & Por período & Día del curso = fecha del evento $-$ fecha de inicio; semana = parte entera de (día / 7) + 1. & Todos los semanales\\
+Estado de matrícula y fecha de retiro & Sistema académico & Categórica y fecha & Estudiante $\times$ asignatura & Diaria & Solo se analiza a quienes siguen matriculados el día 28. & Filtro de población\\
+Eventos (clics) en eVirtual & eVirtual (Moodle), registro de actividad & Entero (conteo) & Estudiante $\times$ curso $\times$ día & Diaria (proceso nocturno) & Suma de eventos por día y por semana, sin contar los eventos automáticos del sistema. & I1, I2\\
+Fecha límite de tareas y cuestionarios & eVirtual (Moodle) & Fecha & Evaluación & Al crear cada evaluación & Se consideran las evaluaciones que vencen antes del día de corte. & I3\\
+Fecha de entrega & eVirtual (Moodle) & Fecha & Estudiante $\times$ evaluación & Diaria & A tiempo si la fecha de entrega es menor o igual a la fecha límite. & I3\\
+Calificación de cada evaluación & eVirtual (libro de calificaciones) & Numérica (0--100) & Estudiante $\times$ evaluación & Diaria & Se lleva a escala de 0 a 100 y se promedia lo entregado a tiempo. & I4\\
+Veces que cursó la asignatura & Sistema académico (historial) & Entero & Estudiante $\times$ asignatura & Por período & 0 si es la primera matrícula, 1 si es la segunda, 2 si es la tercera. & I6, I5\\
+Créditos matriculados & Sistema académico (matrícula) & Entero & Estudiante $\times$ período & Por período & Suma de créditos del período. & I6, I5\\
+Resultado final & Sistema académico (actas) & Categórica (aprobado, reprobado, retirado) & Estudiante $\times$ asignatura & Al cierre del período & Riesgo = 1 si reprobó o se retiró. Solo se usa como etiqueta para entrenar el modelo con períodos anteriores. & Entrenamiento de I5\\
+Intervenciones del tutor & Radar Tutor (pantalla P3) & Registro (fecha, tipo, canal, resultado) & Estudiante $\times$ intervención & Cada vez que se registra & Días transcurridos entre la alerta y la primera acción. & I7\\
+Consentimiento & Radar Tutor o formulario de matrícula & Sí / No, con fecha & Estudiante $\times$ período & Cada vez que cambia & Si es \emph{No}, el estudiante no aparece en el tablero del tutor. & Filtro de acceso\\
+Sexo, edad, si trabaja, discapacidad, nivel socioeconómico & Sistema académico y ficha de Bienestar Universitario & Categórica & Estudiante & Por período & \textbf{No entran al modelo.} Solo sirven para revisar, de forma agregada, si el modelo se equivoca más con algún grupo. & Revisión de sesgos\\
+\end{longtable}
+}
+
+\section{Indicadores}
+
+{\footnotesize
+\begin{longtable}{P{4.6cm} P{10.2cm} P{9.4cm}}
+\toprule
+\textbf{Indicador} & \textbf{Cómo se calcula} & \textbf{Para qué sirve}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\textbf{I1. Índice de participación semanal (IPS)} & Clics del estudiante en la semana dividido para la mediana de clics de su curso en esa semana. Se promedian las semanas 1 a 4. & Un IPS de 1 es una participación normal para ese curso; por debajo de 0,5 es muy baja. Comparamos con el propio curso porque no todas las asignaturas usan eVirtual de la misma forma.\\
+\textbf{I2. Días activos} & Número de días distintos con al menos un clic entre el día 0 y el 27. & Mide constancia. Contamos días y no horas para no perjudicar a quien estudia de noche o los fines de semana.\\
+\textbf{I3. Entrega pendiente} & 1 si hay al menos una evaluación vencida que no se entregó a tiempo; 0 en caso contrario. & Es una señal concreta y fácil de explicar al estudiante.\\
+\textbf{I4. Nota parcial} & Promedio de las notas de lo entregado hasta el corte. & Es solo informativa para el tutor. La dejamos fuera del modelo porque en la prueba de concepto empeoraba los resultados y porque muchas asignaturas todavía no tienen notas en la semana 4.\\
+\textbf{I5. Probabilidad de riesgo (indicador central)} & Regresión logística con I1 (en escala logarítmica), I2, I3 e I6, entrenada con períodos anteriores. Semáforo: rojo si es 0,60 o más; amarillo entre 0,40 y 0,60; verde por debajo de 0,40. & Ordena a los estudiantes para decidir a quién contactar primero. No es un diagnóstico.\\
+\textbf{I6. Historial y carga} & Veces que cursó la asignatura y créditos matriculados. & Repetir la asignatura o tener mucha carga aumenta el riesgo.\\
+\textbf{I7. Cobertura de intervención} & Porcentaje de estudiantes en rojo con al menos una intervención registrada en los 7 días siguientes a la alerta. & Nos dice si los tutores realmente usan la herramienta para actuar.\\
+\end{longtable}
+}
+
+En la prueba de concepto (datos OULAD, entrenando con 2013) los coeficientes estandarizados del modelo fueron: días activos $-0{,}40$; IPS $-0{,}27$; veces cursada $+0{,}16$; créditos $+0{,}17$; entrega pendiente $+0{,}47$. Un signo negativo indica que la variable reduce el riesgo y uno positivo, que lo aumenta.
+
+\section{Equivalencia con el dataset de la prueba de concepto}
+
+Como no tenemos acceso a los datos de eVirtual, la prueba de concepto usa OULAD (\emph{Open University Learning Analytics Dataset}), que tiene una estructura muy parecida a la de Moodle.
+
+{\small
+\begin{longtable}{P{8cm} P{12cm}}
+\toprule
+\textbf{Variable de la herramienta} & \textbf{Equivalente en OULAD}\\
+\midrule
+Clics en eVirtual & \texttt{studentVle.sum\_click}\\
+Fecha límite, fecha de entrega y nota & \texttt{assessments.date}, \texttt{studentAssessment.date\_submitted}, \texttt{studentAssessment.score}\\
+Veces cursada y créditos & \texttt{studentInfo.num\_of\_prev\_attempts}, \texttt{studentInfo.studied\_credits}\\
+Estado de matrícula y retiro & \texttt{studentRegistration.date\_unregistration}\\
+Resultado final & \texttt{studentInfo.final\_result} (\emph{Fail} o \emph{Withdrawn} = riesgo)\\
+Variables para revisar sesgos & \texttt{gender}, \texttt{age\_band}, \texttt{disability}, \texttt{imd\_band}\\
+Intervenciones y consentimiento & No existen en OULAD\\
+\bottomrule
+\end{longtable}
+}
+
+\section{Limpieza de datos}
+\begin{itemize}
+\item Una semana sin registros de clics cuenta como cero clics, no como dato perdido.
+\item Eliminamos eventos duplicados y los generados por docentes, ayudantes o por el propio sistema.
+\item Usamos el IPS en escala logarítmica para que unos pocos estudiantes con miles de clics no pesen demasiado en el modelo.
+\end{itemize}
+
+\section{Ética y privacidad}
+
+\subsection{Qué datos personales usamos}
+
+{\small
+\begin{longtable}{P{7.2cm} P{6.5cm} P{10.5cm}}
+\toprule
+\textbf{Dato} & \textbf{¿Se usa?} & \textbf{Por qué}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Nombre, cédula y correo & Solo para que el tutor asignado pueda contactar al estudiante & No entran al modelo ni a la base de análisis.\\
+Código de estudiante & Sí, con seudónimo & Permite unir eVirtual con el sistema académico.\\
+Actividad en eVirtual, entregas y notas & Sí & Son la base de los indicadores.\\
+Historial académico y créditos & Sí & Tienen relación directa con el rendimiento.\\
+Sexo, edad, discapacidad, nivel socioeconómico, si trabaja & No en el modelo; solo para revisar sesgos & Queremos evitar la discriminación. Además, la discapacidad y la salud son datos sensibles según la Ley Orgánica de Protección de Datos Personales (LOPDP).\\
+Mensajes de los foros & No & No hacen falta para el objetivo de la herramienta.\\
+Hora de conexión & No & Perjudicaría a quienes trabajan.\\
+\end{longtable}
+}
+
+\subsection{Cómo se anonimizan}
+\begin{itemize}
+\item El código del estudiante se reemplaza por un seudónimo; la clave para hacerlo la custodia la Dirección de TIC.
+\item Los reportes para autoridades solo muestran grupos de 10 estudiantes o más.
+\item Los datos de actividad se guardan durante el período y un año más; luego se eliminan o se conservan solo agregados.
+\item Todo el procesamiento ocurre en servidores de la universidad.
+\end{itemize}
+
+\subsection{Quién puede ver qué}
+
+{\small
+\begin{longtable}{P{5.5cm} P{10cm} P{8.7cm}}
+\toprule
+\textbf{Rol} & \textbf{Puede ver} & \textbf{No puede ver}\\
+\midrule
+Estudiante & Sus propios indicadores comparados con la mediana del curso, recursos y un botón para pedir tutoría. & Su probabilidad de riesgo y los datos de otros estudiantes.\\
+Tutor académico & El tablero y las fichas de sus tutorados, con nombre. & Estudiantes de otros tutores y variables demográficas.\\
+Docente de la asignatura & Datos agregados de su curso. & La probabilidad de riesgo de cada estudiante, para que no influya al calificar.\\
+Dirección de carrera y Bienestar & Datos agregados por cohorte. Bienestar ve solo los casos que se le derivan. & Datos individuales que no se le han derivado.\\
+Equipo técnico & Datos con seudónimo. & Nombres y cédulas.\\
+\bottomrule
+\end{longtable}
+}
+
+\subsection{Consentimiento}
+\begin{itemize}
+\item Consentimiento informado al inicio del período: qué datos se usan, para qué, quién los ve y durante cuánto tiempo.
+\item El estudiante puede retirarse en cualquier momento, sin consecuencias académicas.
+\item Nos basamos en la LOPDP del Ecuador (2021), en especial en los principios de finalidad, proporcionalidad y minimización de datos.
+\item Antes de un piloto real, el proyecto debería pasar por el comité de ética de la universidad, como se hizo en los pilotos del proyecto LALA, donde se firmaron acuerdos sobre el uso de los datos.
+\end{itemize}
+
+\subsection{Sesgos que podría introducir el indicador}
+
+{\small
+\begin{longtable}{P{5.2cm} P{7.2cm} P{11.8cm}}
+\toprule
+\textbf{Sesgo} & \textbf{Por qué ocurre} & \textbf{Qué hacemos}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Perjudicar a quien trabaja o tiene mala conexión & Se conecta menos días o descarga el material y estudia sin conexión. & Contamos días activos y no horarios, y revisamos aciertos y falsas alarmas según si el estudiante trabaja. En la prueba de concepto el modelo detectó al 77\,\% de los estudiantes de 35 a 55 años en riesgo, frente al 84\,\% de los menores de 35.\\
+Asignaturas que usan poco eVirtual & Todos los estudiantes del curso tienen pocos clics. & Comparamos con la mediana del propio curso (I1) y revisamos los umbrales por asignatura.\\
+Diferencias por sexo & El modelo puede acertar menos en un grupo. & Lo revisamos cada período. En la prueba de concepto el AUC fue 0,69 en mujeres y 0,73 en hombres.\\
+Etiquetar al estudiante & Si ve \emph{riesgo alto}, puede desmotivarse. & Ni el estudiante ni el docente de la asignatura ven la probabilidad; la decisión final siempre es del tutor.\\
+Los clics se vuelven una meta & Si se sabe que cuentan, pueden inflarse. & El indicador no se usa para calificar.\\
+Sesgo de los datos históricos & El modelo aprende de resultados pasados. & Revisamos sesgos antes de reentrenar el modelo en cada período.\\
+\end{longtable}
+}
+
+\end{document}
