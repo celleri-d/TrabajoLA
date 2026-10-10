@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{longtable,array,booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{nosep,leftmargin=*}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Fase 6. Plan de validación}\\[2pt]
+Radar Tutor UC -- Ciencia de Datos, Unidad 2 -- Universidad de Cuenca
+\end{center}
+
+En esta fase no ejecutamos la validación: describimos cómo la haríamos. Seguimos los tres niveles que pide el trabajo. Al revisar los casos vistos en clase notamos que la mayoría se quedó en la validación técnica o en encuestas de percepción, así que pusimos especial cuidado en el nivel pedagógico.
+
+\section*{Resumen}
+
+{\small
+\begin{longtable}{P{2.2cm} P{3.2cm} P{9.8cm}}
+\toprule
+\textbf{Nivel de validación} & \textbf{Pregunta que responde} & \textbf{Lo que especificamos}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\textbf{Técnica} & ¿El indicador o modelo mide lo que dice medir? & \textbf{Métrica:} AUC, recall y precisión. \textbf{Partición:} temporal (entrenar con períodos anteriores y probar con el siguiente). \textbf{Umbral aceptable:} AUC de al menos 0,70 y recall de al menos 0,75 con la alerta amplia (probabilidad de 0,40 o más). \textbf{Indicadores descriptivos:} contrastar I1 e I2 con la nota final mediante correlación.\\
+\midrule
+\textbf{Pedagógica} & ¿Usar la herramienta cambia algo en el aprendizaje o la decisión? & \textbf{Hipótesis:} entre los estudiantes alertados en la semana 4, la tasa de aprobación es mayor en los paralelos cuyo tutor usa la herramienta. \textbf{Variable dependiente:} aprobó o no aprobó. \textbf{Comparación:} asignación aleatoria por paralelo. \textbf{Duración:} un semestre. \textbf{Muestra:} unos 356 estudiantes alertados por grupo (cálculo aproximado). \textbf{Amenazas:} contaminación entre tutores, efecto del docente, efecto Hawthorne y retiros.\\
+\midrule
+\textbf{Usabilidad y adopción} & ¿Los usuarios la entienden y la usan? & \textbf{Instrumentos:} SUS, entrevistas, prueba con los wireframes y registro de uso. \textbf{Participantes:} de 6 a 10 tutores de primer ciclo y de 15 a 20 estudiantes. \textbf{Criterio de éxito:} SUS de al menos 68, al menos 70\,\% de los tutores usándola cada semana y al menos 80\,\% de los casos en rojo atendidos en 7 días o menos.\\
+\end{longtable}
+}
+
+\section{Validación técnica}
+
+\textbf{Datos.} Usaríamos los registros de eVirtual y del sistema académico de tres períodos anteriores de asignaturas de primer ciclo, con seudónimos.
+
+\textbf{Partición.} Entrenamos con los dos períodos más antiguos y probamos con el más reciente. Preferimos esta partición temporal porque reproduce el uso real de la herramienta: se entrena con lo que ya pasó y se predice el período que está en curso. Una partición aleatoria mezclaría estudiantes del mismo curso y daría resultados demasiado optimistas. También probaríamos dejando fuera una asignatura completa, para ver si el modelo sirve en asignaturas que no conoce.
+
+\textbf{Métricas.}
+\begin{itemize}
+\item \textbf{AUC:} no depende del umbral y permite comparar con la prueba de concepto, donde obtuvimos 0,72 con OULAD.
+\item \textbf{Recall con la alerta amplia (0,40 o más):} lo más importante es no dejar sin detectar a un estudiante que va a reprobar, sobre todo porque la acción para el nivel amarillo es barata (un mensaje).
+\item \textbf{Precisión en rojo (0,60 o más):} el tiempo de tutoría es limitado, así que en rojo queremos pocas falsas alarmas.
+\item \textbf{Calibración:} si el tablero dice 0,8, alrededor del 80\,\% de esos estudiantes debería terminar en riesgo.
+\end{itemize}
+
+\textbf{Umbral aceptable y por qué.} AUC de al menos 0,70, recall de al menos 0,75 con la alerta amplia y precisión de al menos 0,60 en rojo. Con valores más bajos el semáforo no ayudaría a priorizar mejor que la intuición del tutor. La prueba de concepto ya está en ese rango: AUC de 0,72, recall de 0,82 y precisión en rojo de 0,67.
+
+\textbf{Comparación con algo más simple.} Compararíamos el modelo con una regla sencilla (``IPS menor a 0,5 o una entrega pendiente'') y con la práctica actual, que es esperar la nota del primer parcial. Si el modelo no supera a la regla, no vale la pena la complejidad.
+
+\textbf{Sesgos.} Calcularíamos el recall y las falsas alarmas por sexo, edad, si el estudiante trabaja, nivel socioeconómico y discapacidad. La diferencia de recall entre grupos no debería superar 0,05.
+
+\textbf{Indicadores descriptivos.} Contrastaríamos I1 e I2 con la nota final mediante una correlación, y compararíamos la tasa de reprobación entre quienes tienen una entrega pendiente (I3 = 1) y quienes no. En OULAD el IPS promedio fue de 2,38 en quienes aprobaron y de 1,35 en quienes reprobaron, lo que sugiere que el indicador sí distingue.
+
+\section{Validación pedagógica}
+
+\textbf{Hipótesis.} Entre los estudiantes de primer ciclo alertados en la semana 4 (probabilidad de 0,40 o más), la tasa de aprobación es mayor en los paralelos cuyo tutor usa Radar Tutor UC que en los paralelos con tutoría habitual.
+
+\textbf{Hipótesis nula.} No hay diferencia en la tasa de aprobación entre los dos grupos.
+
+{\small
+\begin{longtable}{P{3.4cm} P{12.0cm}}
+\toprule
+\textbf{Elemento} & \textbf{Qué proponemos}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Variable dependiente & Aprobó o no aprobó la asignatura (el retiro cuenta como no aprobado).\\
+Otras variables & Nota final, retiro, matrícula en el segundo ciclo y días entre la alerta y la primera intervención.\\
+A quién comparamos & A los estudiantes con probabilidad de 0,40 o más en la semana 4. El riesgo se calcula también en el grupo de comparación, pero su tutor no lo ve.\\
+Grupo de comparación & Asignación aleatoria por paralelo: sorteamos los paralelos de primer ciclo entre \emph{con herramienta} y \emph{tutoría habitual}, separando por asignatura. Sorteamos paralelos y no estudiantes porque un tutor no puede ignorar lo que ya vio en el tablero.\\
+Si no se puede sortear & Comparación antes y después: la misma asignatura en el período anterior (sin herramienta) frente al período con herramienta. Es un diseño más débil, porque tiene el mismo problema de comparar cohortes distintas que señalamos en OnTask.\\
+Duración & Un semestre completo (16 semanas). La permanencia se revisa al inicio del período siguiente.\\
+Tamaño mínimo de muestra & Para detectar una subida de la aprobación del 60\,\% al 70\,\%, con 95\,\% de confianza y 80\,\% de potencia, un cálculo aproximado para dos proporciones da unos 356 estudiantes alertados por grupo. Como sorteamos paralelos y no estudiantes, harían falta más: con unos 15 alertados por paralelo, al menos 24 paralelos por grupo. Este es el cálculo que más necesitamos revisar en la Unidad 3.\\
+Amenazas a la validez & Los tutores conversan entre sí (contaminación); los paralelos tienen docentes distintos; los tutores con herramienta pueden esforzarse más solo por saberse observados (efecto Hawthorne); hay retiros durante el semestre; y solo lo probaríamos en primer ciclo.\\
+Cómo reducirlas & Separar por asignatura y docente al sortear, dar una capacitación parecida a ambos grupos, registrar el riesgo inicial de cada estudiante y dejar escrita la hipótesis antes de empezar.\\
+\end{longtable}
+}
+
+Además registraríamos si la herramienta realmente se usó, con la cobertura I7. En el boletín 5 del proyecto LALA los propios equipos reconocen que la efectividad de sus herramientas fue difícil de medir; contar con este registro desde el inicio nos permitiría distinguir entre ``no funcionó'' y ``no se usó''.
+
+\section{Usabilidad y adopción}
+
+{\small
+\begin{longtable}{P{3.4cm} P{12.0cm}}
+\toprule
+\textbf{Elemento} & \textbf{Qué proponemos}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Participantes & De 6 a 10 tutores de primer ciclo en la prueba inicial, todos los tutores del grupo con herramienta durante el piloto, y de 15 a 20 estudiantes para la pantalla P4.\\
+Instrumentos & (1) Prueba con los wireframes antes de programar: cinco tareas, por ejemplo ``¿a quién llamarías primero?'' o ``registra una tutoría'', pidiendo que piensen en voz alta. (2) Cuestionario SUS en las semanas 4 y 12, como se hizo con los consejeros de ESPOL en el proyecto LALA. (3) Entrevista corta al final sobre utilidad, confianza en el semáforo y carga de trabajo. (4) Registro de uso de la herramienta: ingresos, fichas abiertas, mensajes y tutorías.\\
+Criterio de éxito & SUS promedio de al menos 68; al menos 80\,\% de las tareas completadas sin ayuda; al menos 70\,\% de los tutores usándola cada semana; al menos 80\,\% de los casos en rojo atendidos en 7 días o menos; y menos del 20\,\% de estudiantes que se sientan vigilados.\\
+\end{longtable}
+}
+
+\section{Preguntas que todavía no sabemos responder}
+
+Esperamos resolver estas preguntas en la Unidad 3 (Estadística para Ciencia de Datos):
+
+\begin{enumerate}[leftmargin=1.5em]
+\item Si en el piloto el grupo con herramienta aprueba un 66\,\% y el grupo de comparación un 60\,\%, ¿cómo sabemos si esa diferencia es real o se debe al azar?
+\item ¿Cuántos estudiantes y cuántos paralelos necesitamos para detectar una mejora de 10 puntos en la aprobación si sorteamos paralelos y no estudiantes?
+\item Nuestra variable principal es aprobado o no aprobado. ¿Qué prueba estadística corresponde?
+\item ¿Cómo calculamos un intervalo de confianza para el recall (0,82) y el AUC (0,72) de la prueba de concepto?
+\item La regresión logística obtuvo un AUC de 0,716 y el árbol de decisión de 0,702. ¿La diferencia es real o son prácticamente iguales?
+\item El recall fue de 0,77 en estudiantes de 35 a 55 años y de 0,84 en menores de 35. ¿Esa diferencia es significativa?
+\item ¿Cómo controlamos el efecto de que cada paralelo tenga un docente distinto al comparar los grupos?
+\item ¿Cómo comprobamos que las probabilidades del modelo están bien calibradas?
+\item Si los tutores con herramienta hacen más tutorías, ¿cómo separamos el efecto de la herramienta del efecto de simplemente hacer más tutorías?
+\item Con un SUS de 68 en solo 8 tutores, ¿podemos concluir algo?
+\end{enumerate}
+
+\end{document}
