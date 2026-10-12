@@ -2,6 +2,8 @@
 
 Trabajo aplicativo de Ciencia de Datos, Unidad 2 (Learning Analytics), Universidad de Cuenca.
 
+**Autores:** David Célleri y José Solórzano
+
 Proponemos una herramienta de alerta temprana para que el tutor académico de primer ciclo sepa, desde la semana 4 del ciclo, a qué estudiantes conviene contactar primero. Combina la actividad en eVirtual con datos del sistema académico y registra cada intervención para poder evaluar después si sirvió.
 
 ## Canvas de diseño
