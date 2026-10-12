@@ -1,6 +1,5 @@
 % Pitch de 6 minutos - Radar Tutor UC
 % Compilar con XeLaTeX:  xelatex Pitch.tex
-% Versión del presentador (diapositiva + notas): xelatex Pitch_presentador.tex
 \documentclass[aspectratio=169,10pt]{beamer}
 
 \usepackage{fontspec}
@@ -10,12 +9,6 @@
 \usepackage{tcolorbox}
 \usepackage{fontawesome5}
 \usepackage{booktabs}
-\usepackage{pgfpages}
-
-\ifdefined\presentador
-  \setbeameroption{show notes on second screen=right}
-  \setbeamertemplate{note page}{\vspace*{4pt}\small\insertnote}
-\fi
 
 % ---------- Colores y estilo
 \definecolor{azul}{HTML}{1F4E79}
@@ -80,7 +73,6 @@
   \node[anchor=north west,text=white!70!azul,font=\small,align=left] at ([xshift=1.2cm,yshift=-6.9cm]current page.north west)
     {Ciencia de Datos · Unidad 2 · Learning Analytics\\Universidad de Cuenca};
 \end{tikzpicture}
-\note{\textbf{[A · 0:00–0:10]} Buenos días. Les presentamos \emph{Radar Tutor UC}, una herramienta de learning analytics que ayuda al tutor académico a saber, desde la semana 4, a qué estudiantes de primer ciclo debe contactar primero.}
 \end{frame}}
 
 % =====================================================================
@@ -106,12 +98,6 @@ Después del primer parcial (semana 7 u 8), con la nota parcial o porque el estu
 \end{tarjeta}
 \end{column}
 \end{columns}
-\note{\textbf{[A · 0:10–0:40]}
-\begin{itemize}
-\item En la UCuenca, el 11,3\,\% de una cohorte abandona en el primer año y el pico está en el primer semestre.
-\item El tutor tiene que decidir a quién apoyar, pero hoy decide a ciegas: la primera señal clara es el parcial, en la semana 7 u 8.
-\item Al analizar las cinco herramientas vistas en clase notamos que casi todas apoyan la consejería al \emph{inicio} del semestre; ninguna alerta \emph{durante} el ciclo con la actividad de eVirtual. Esa es la brecha.
-\end{itemize}}
 \end{frame}
 
 \begin{frame}{La pregunta que responde la herramienta}
@@ -130,12 +116,6 @@ Después del primer parcial (semana 7 u 8), con la nota parcial o porque el estu
 \begin{column}{0.31\textwidth}\begin{tarjeta}[\faCircle\ \ Amarillo: 0,40–0,60]{ambar}\small Mensaje con recursos (envío masivo con plantilla)\end{tarjeta}\end{column}
 \begin{column}{0.31\textwidth}\begin{tarjeta}[\faCircle\ \ Verde: p < 0,40]{verde}\small Seguimiento semanal, sin acción\end{tarjeta}\end{column}
 \end{columns}
-\note{\textbf{[A · 0:40–1:10]}
-\begin{itemize}
-\item Leer la pregunta en voz alta. Es predictiva: estima qué pasará.
-\item Lo importante es que no es un reporte: cada color activa una acción. El rojo, una tutoría (costosa, por eso es para los casos más probables). El amarillo, un mensaje (barato, tolera falsas alarmas).
-\item Todo lo que haga el tutor queda registrado; eso servirá para validar.
-\end{itemize}}
 \end{frame}
 
 % =====================================================================
@@ -171,14 +151,6 @@ Se recalcula cada lunes.
 \begin{tcolorbox}[colback=fondo,colframe=fondo,arc=2pt,left=8pt]
 \footnotesize\faUserShield\ \ \textbf{Ética:} seudónimos · sin variables demográficas en el modelo · el estudiante no ve su probabilidad · consentimiento con opción de retirarse (LOPDP) · contamos días y no horas para no perjudicar a quien trabaja.
 \end{tcolorbox}
-\note{\textbf{[A · 1:10–2:10]}
-\begin{itemize}
-\item Usamos solo datos que la universidad ya tiene: es la lección principal de los pilotos LALA.
-\item El IPS compara al estudiante con su \emph{propio curso}, porque no todas las asignaturas usan eVirtual igual.
-\item Contamos días activos y no horas conectado, para no castigar a quien estudia de noche o trabaja.
-\item Las variables demográficas no entran al modelo: solo las usamos para revisar sesgos. El estudiante no ve su probabilidad, para no etiquetarlo.
-\item \emph{Pasar la palabra a B para la demo.}
-\end{itemize}}
 \end{frame}
 
 % =====================================================================
@@ -196,13 +168,6 @@ Se recalcula cada lunes.
 \includegraphics[height=6.3cm]{img/app_P1.png}
 \end{column}
 \end{columns}
-\note{\textbf{[B · 2:10–3:00]} \emph{(Si se puede, abrir el notebook en la sección 4; si no, usar esta diapositiva.)}
-\begin{itemize}
-\item A la izquierda, el wireframe; a la derecha, la misma pantalla construida con datos reales de un curso de 348 estudiantes.
-\item Arriba, las tarjetas: 99 en rojo y 108 en amarillo.
-\item El gráfico de participación muestra que el grupo rojo casi no entra a la plataforma desde la primera semana, mientras el verde está por encima de la mediana.
-\item Abajo, la lista ordenada por riesgo, con cada indicador del diccionario y la acción sugerida.
-\end{itemize}}
 \end{frame}
 
 \begin{frame}{La ficha explica por qué un estudiante está en alerta}
@@ -219,12 +184,6 @@ Se recalcula cada lunes.
 \end{itemize}
 \end{column}
 \end{columns}
-\note{\textbf{[B · 3:00–3:30]}
-\begin{itemize}
-\item Al hacer clic en un estudiante se abre su ficha (wireframe P2).
-\item Este estudiante tiene 0,90 de riesgo: entró un solo día y no entregó la primera tarea.
-\item La explicación evita la caja negra: el tutor ve qué pesa más. Desde aquí agenda la tutoría (pantalla P3).
-\end{itemize}}
 \end{frame}
 
 \begin{frame}{¿Qué tan bien funciona?}
@@ -244,12 +203,6 @@ Se recalcula cada lunes.
 \end{itemize}
 \end{column}
 \end{columns}
-\note{\textbf{[B · 3:30–4:10]}
-\begin{itemize}
-\item AUC de 0,72: el modelo ordena bien a los estudiantes unas 7 de cada 10 veces. Es moderado, suficiente para priorizar.
-\item Traducido al tutor: de cada 100 estudiantes que terminan reprobando, alertamos a 82 en la semana 4.
-\item Por eso hay dos niveles: el amarillo detecta mucho (con falsas alarmas, pero la acción es barata) y el rojo es más preciso.
-\end{itemize}}
 \end{frame}
 
 % =====================================================================
@@ -275,12 +228,6 @@ Se recalcula cada lunes.
 \end{tarjeta}
 \end{column}
 \end{columns}
-\note{\textbf{[B · 4:10–4:30]}
-\begin{itemize}
-\item Somos honestos con lo que falta: el modelo predice, pero no prueba que la herramienta ayude.
-\item Encontramos diferencias por edad que coinciden con el sesgo que anticipamos (quien trabaja participa distinto en línea).
-\item Por eso diseñamos una validación en tres niveles.
-\end{itemize}}
 \end{frame}
 
 \begin{frame}{Plan de validación en tres niveles}
@@ -307,12 +254,6 @@ SUS, entrevistas y registro de uso con 6 a 10 tutores.\\[3pt]
 \end{tarjeta}
 \end{column}
 \end{columns}
-\note{\textbf{[A · 4:30–5:20]}
-\begin{itemize}
-\item Técnica: probar con datos reales de cohortes pasadas de la UCuenca, con partición temporal.
-\item Pedagógica, la más importante: sortear paralelos entre \emph{con herramienta} y \emph{tutoría habitual}. Sorteamos paralelos y no estudiantes porque un tutor no puede ignorar lo que ya vio. Es justo lo que les faltó a los casos de clase: un grupo de comparación en el mismo período.
-\item Usabilidad: SUS y registro de uso; si la herramienta no se usa, no puede funcionar.
-\end{itemize}}
 \end{frame}
 
 \begin{frame}{Preguntas que todavía no sabemos responder}
@@ -324,7 +265,6 @@ SUS, entrevistas y registro de uso con 6 a 10 tutores.\\[3pt]
 \item ¿Cuál es el intervalo de confianza del recall (0,82) y del AUC (0,72)?
 \item ¿La diferencia de recall por edad (0,77 frente a 0,84) es significativa?
 \end{enumerate}
-\note{\textbf{[A · 5:20–5:50]} Leer dos o tres preguntas. Son las que todavía no sabemos responder.}
 \end{frame}
 
 % =====================================================================
@@ -337,14 +277,6 @@ SUS, entrevistas y registro de uso con 6 a 10 tutores.\\[3pt]
   \node[text=white!70!azul,font=\small,align=center] at ([yshift=-1.8cm]current page.center)
     {Del aviso tardío del primer parcial a una alerta en la semana 4 que se puede validar.};
 \end{tikzpicture}
-\note{\textbf{[A · 5:50–6:00]} Cerrar con la frase de la diapositiva y abrir preguntas.\\[4pt]
-\textbf{Preguntas probables:}
-\begin{itemize}
-\item \emph{¿Por qué OULAD?} No tenemos acceso a eVirtual; tiene la misma estructura que Moodle.
-\item \emph{¿Por qué el estudiante no ve su riesgo?} Para no etiquetarlo ni desmotivarlo.
-\item \emph{¿Por qué 0,60 para rojo?} 2 de cada 3 alertas rojas son correctas, y una tutoría toma tiempo.
-\item \emph{¿En qué se diferencia de AvAc?} AvAc apoya la consejería al inicio del semestre; esto alerta durante el ciclo y podría integrarse con AvAc.
-\end{itemize}}
 \end{frame}}
 
 \end{document}

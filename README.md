@@ -29,7 +29,7 @@ La versión completa del Canvas está en [01_canvas/Canvas_diseno.pdf](01_canvas
 | 2 | Diccionario de datos, ética y privacidad | [02_datos/Diccionario_de_datos.pdf](02_datos/Diccionario_de_datos.pdf) |
 | 3 | Wireframes, flujo de intervención y arquitectura | [03_diseno/Diseno_herramienta.pdf](03_diseno/Diseno_herramienta.pdf) |
 | 4 | Notebook de prueba de concepto | [04_prueba_concepto/poc_radar_tutor.ipynb](04_prueba_concepto/poc_radar_tutor.ipynb) |
-| 5 | Pitch de 6 minutos (versión para el público y versión del presentador con notas) | [05_presentacion/Pitch.pdf](05_presentacion/Pitch.pdf) · [05_presentacion/Pitch_presentador.pdf](05_presentacion/Pitch_presentador.pdf) |
+| 5 | Pitch de 6 minutos | [05_presentacion/Pitch.pdf](05_presentacion/Pitch.pdf) |
 | 6 | Plan de validación | [06_validacion/Plan_de_validacion.pdf](06_validacion/Plan_de_validacion.pdf) |
 | – | Declaración de uso de IA | [Declaracion_uso_IA.pdf](Declaracion_uso_IA.pdf) |
 
