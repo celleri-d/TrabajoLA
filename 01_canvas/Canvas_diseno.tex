@@ -49,7 +49,17 @@ Además, el piloto de AvAc dentro del proyecto LALA mostró que la universidad n
 
 \textbf{4. Datos e indicadores}
 & \textbf{Fuentes:} eVirtual/Moodle (registros de actividad, entregas y calificaciones), sistema académico (matrícula, veces que se cursa la asignatura, créditos y resultado final) y los registros de la propia herramienta (intervenciones y consentimiento).\par
-\textbf{Indicador central (I5):} probabilidad de riesgo, calculada con una regresión logística a partir de I1 (índice de participación semanal: clics de la semana dividido para la mediana del curso), I2 (días activos), I3 (entrega pendiente) e I6 (veces cursada y créditos). Se muestra como semáforo: rojo si es mayor o igual a 0,60; amarillo entre 0,40 y 0,60; verde por debajo de 0,40. El detalle está en el diccionario de datos (carpeta 02\_datos).\\
+\textbf{Indicadores} (por estudiante y asignatura, con corte al cierre de la semana 4):
+\begin{itemize}
+\item \textbf{I1. Índice de participación semanal:} clics del estudiante en la semana dividido para la mediana de clics de su curso, promediado entre las semanas 1 y 4. Un valor de 1 es una participación normal y uno menor a 0,5 es muy baja.
+\item \textbf{I2. Días activos:} número de días distintos con al menos un clic en eVirtual. Mide la constancia sin perjudicar a quien estudia de noche o los fines de semana.
+\item \textbf{I3. Entrega pendiente:} 1 si tiene al menos una evaluación vencida sin entregar y 0 si no la tiene.
+\item \textbf{I4. Nota parcial:} promedio de lo entregado hasta el corte. Es solo informativa para el tutor y no entra al modelo.
+\item \textbf{I5. Probabilidad de riesgo (indicador central):} regresión logística con I1, I2, I3 e I6, entrenada con períodos anteriores. Se muestra como semáforo: rojo si es mayor o igual a 0,60; amarillo entre 0,40 y 0,60; verde por debajo de 0,40. Sirve para decidir a quién contactar primero; no es un diagnóstico.
+\item \textbf{I6. Historial y carga:} veces que el estudiante ha cursado la asignatura y créditos matriculados.
+\item \textbf{I7. Cobertura de intervención:} porcentaje de estudiantes en rojo con al menos una intervención registrada en los 7 días siguientes a la alerta. No describe al estudiante: mide si el tutor está actuando.
+\end{itemize}
+El detalle de fuentes y transformaciones está en el diccionario de datos (carpeta 02\_datos).\\
 \midrule
 
 \textbf{5. Intervención}
